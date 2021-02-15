@@ -39,6 +39,7 @@ module Pages
     end
 
     def movie_titles
+      binding.pry
       page.all('.mr-movie-title').map(&:text)
     end
 
