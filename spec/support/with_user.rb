@@ -1,12 +1,16 @@
 require 'support/pages/home'
 
 module RspecSupportWithUser
+  MOCK_NAMESPACE = 'github'
+  MOCK_UID_NUMBER = '1235'
+  MOCK_UID = "#{MOCK_NAMESPACE}|#{MOCK_UID_NUMBER}"
+
   def with_auth_mock
     before do
       OmniAuth.config.test_mode = true
       OmniAuth.config.add_mock(
-        :github,
-        uid: '12345',
+        MOCK_NAMESPACE.to_sym,
+        uid: MOCK_UID_NUMBER,
         info: {
           name: 'John McFoo'
         }
@@ -28,6 +32,7 @@ module RspecSupportWithUser
       end
     end
   end
+
 end
 
 RSpec.configure { |c| c.extend RspecSupportWithUser }
