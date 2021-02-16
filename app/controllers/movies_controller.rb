@@ -4,13 +4,15 @@ class MoviesController < ApplicationController
     if _index_params[:user_id]
       @submitter = User[_index_params[:user_id]]
       scope = Movie.find(user_id: @submitter.id)
+    elsif !current_user
+      scope = Movie.all
     else
       @current_filter = _index_params.fetch(:filter, 'i_neutral')
       scope = case @current_filter
               when 'i_liked'
-                User.find(liked_movies: current_user)
+                current_user.liked_movies
               when 'i_hated'
-                User.find(hated_movies: current_user)
+                current_user.hated_movies
               when 'i_neutral'
                 Movie.all
               else

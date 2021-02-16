@@ -23,7 +23,7 @@ RSpec.describe 'filter movie list', type: :feature do
       liker_count:  1,
       hater_count:  0,
     )
-    @m_liked.likers.add me_user
+    VotingBooth.new(me_user, @m_liked).vote(:like)
 
     @m_hated = Movie.create(
       title:        'Teenage mutant nija turtles',

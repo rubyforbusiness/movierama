@@ -13,7 +13,6 @@ RSpec.describe VotingBooth do
       let(:like_or_hate) { :like }
 
       context 'me liking a movie' do
-
         it 'increases the likers of a movie' do
           expect {subject}.to change { movie.likers.count }.by 1
         end
@@ -91,7 +90,6 @@ RSpec.describe VotingBooth do
       end
 
       context 'me hating a movie I used to like' do
-
         before do
           movie.liker_count += 1
           movie.likers.add user
@@ -119,7 +117,5 @@ RSpec.describe VotingBooth do
         end
       end
     end
-
-
   end
 end
