@@ -68,6 +68,12 @@ RSpec.describe VotingBooth do
       let!(:user) { create(:user) }
       let!(:movie) { create(:movie, user: user) }
 
+      before do
+        movie.liker_count += 1
+        movie.likers.add user
+        user.liked_movies.add movie
+      end
+
       it 'decreases the likers of a movie' do
         expect {subject}.to change { movie.likers.count }.by -1
       end
