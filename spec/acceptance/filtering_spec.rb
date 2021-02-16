@@ -70,20 +70,43 @@ RSpec.describe 'filter movie list', type: :feature do
 
   context 'filters and sorts' do
     before do
-      another_user = User.create(
-        uid:  'null|112233',
-        name: 'Mr. Newby'
+      liker_user_1 = User.create(
+        uid:  'liker|112233',
+        name: 'User Liker 1'
+      )
+      hater_user_1 = User.create(
+        uid:  'hater|112233',
+        name: 'User Hater 1'
+      )
+      hater_user_2 = User.create(
+        uid:  'hater|223344',
+        name: 'User Hater 2'
+      )
+      hater_user_3 = User.create(
+        uid:  'hater|334455',
+        name: 'User Hater 3'
       )
       me_user = User.find(uid: RspecSupportWithUser::MOCK_UID).first
       VotingBooth.new(me_user, @m_novote).vote(:like)
-      VotingBooth.new(another_user, @m_liked).vote(:like)
+      VotingBooth.new(liker_user_1, @m_liked).vote(:like)
       @liked_sorted_likers_titles = [@m_liked, @m_novote].map(&:title)
+
+      VotingBooth.new(hater_user_1, @m_novote).vote(:hate)
+      VotingBooth.new(hater_user_2, @m_novote).vote(:hate)
+      VotingBooth.new(hater_user_3, @m_novote).vote(:hate)
+      @liked_sorted_haters_titles = [@m_novote, @m_liked].map(&:title)
     end
 
     it 'shows movies I like sorted by likers' do
       page.filter_by('I liked')
       page.sort_by('likers')
       expect(page.movie_titles).to eq(@liked_sorted_likers_titles)
+    end
+
+    it 'shows movies I like sorted by haters' do
+      page.filter_by('I liked')
+      page.sort_by('haters')
+      expect(page.movie_titles).to eq(@liked_sorted_haters_titles)
     end
   end
 end
