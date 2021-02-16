@@ -22,15 +22,16 @@
         |
         = link_to('date', by: 'date', filter: @current_filter)
 
-  .row.mr-filter
-    .col-md-12
-      .well.well-sm
-        Filter by
-        = link_to('I liked', filter: 'i_liked', by: @current_sort)
-        |
-        = link_to('I hated', filter: 'i_hated', by: @current_sort)
-        |
-        = link_to('No filter', filter: 'no_filter', by: @current_sort)
+  - if current_user
+    .row.mr-filter
+      .col-md-12
+        .well.well-sm
+          Filter by
+          = link_to('I liked', filter: 'i_liked', by: @current_sort)
+          |
+          = link_to('I hated', filter: 'i_hated', by: @current_sort)
+          |
+          = link_to('No filter', filter: 'no_filter', by: @current_sort)
 
   .row
     .col-md-9
