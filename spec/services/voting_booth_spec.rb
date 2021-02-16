@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe VotingBooth do
   describe '#vote' do
+
     context 'me liking a movie' do
       subject do
         described_class.new(user, movie).vote(:like)
@@ -57,6 +58,41 @@ RSpec.describe VotingBooth do
         expect {subject}.to change {
           user.hated_movies.include? movie
         }.from(false).to(true)
+      end
+    end
+
+    context 'me liking a movie I used to hate' do
+      subject do
+        described_class.new(user, movie).vote(:like)
+      end
+
+      let!(:user) { create(:user) }
+      let!(:movie) { create(:movie, user: user) }
+
+      before do
+        movie.hater_count += 1
+        movie.haters.add user
+        user.hated_movies.add movie
+      end
+
+      it 'decreases the haters of a movie' do
+        expect {subject}.to change { movie.haters.count }.by -1
+      end
+
+      it 'stops me being a hater of a movie' do
+        expect {subject}.to change {
+          movie.haters.include? user
+        }.from(true).to(false)
+      end
+
+      it 'decreases the number of movies I hate' do
+        expect {subject}.to change { user.hated_movies.count }.by -1
+      end
+
+      it 'removes the movie from the list I hate' do
+        expect {subject}.to change {
+          user.hated_movies.include? movie
+        }.from(true).to(false)
       end
     end
 
