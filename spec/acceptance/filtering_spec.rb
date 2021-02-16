@@ -20,7 +20,7 @@ RSpec.describe 'filter movie list', type: :feature do
       date:         '1980-05-21',
       created_at:   Time.parse('2014-10-01 10:30 UTC').to_i,
       user:         author,
-      liker_count:  1,
+      liker_count:  0,
       hater_count:  0,
     )
     VotingBooth.new(me_user, @m_liked).vote(:like)
@@ -34,6 +34,7 @@ RSpec.describe 'filter movie list', type: :feature do
       liker_count:  0,
       hater_count:  0
     )
+    VotingBooth.new(me_user, @m_hated).vote(:hate)
 
     @m_novote = Movie.create(
       title:        'Singin\' In the Rain',
@@ -54,6 +55,11 @@ RSpec.describe 'filter movie list', type: :feature do
   it 'filters movies to show only those I liked' do
     page.filter_by('I liked')
     expect(page.movie_titles).to eq(@liked_titles)
+  end
+
+  it 'filters movies to show only those I hated' do
+    page.filter_by('I hated')
+    expect(page.movie_titles).to eq(@hated_titles)
   end
 end
 
