@@ -5,10 +5,21 @@ class MoviesController < ApplicationController
       @submitter = User[_index_params[:user_id]]
       scope = Movie.find(user_id: @submitter.id)
     else
-      scope = Movie.all
+      @current_filter = _index_params.fetch(:filter, 'i_neutral')
+      scope = case @current_filter
+              when 'i_liked'
+                User.find(liked_movies: current_user)
+              when 'i_hated'
+                User.find(hated_movies: current_user)
+              when 'i_neutral'
+                Movie.all
+              else
+                raise "invalid filter param: #{@current_filter}"
+              end
     end
 
-    @movies = case _index_params.fetch(:by, 'likers')
+    @current_sort = _index_params.fetch(:by, 'likers')
+    @movies = case @current_sort
     when 'likers'
       scope.sort(by: 'Movie:*->liker_count', order: 'DESC')
     when 'haters'
@@ -45,7 +56,7 @@ class MoviesController < ApplicationController
   private
 
   def _index_params
-    params.permit(:by, :user_id)
+    params.permit(:by, :user_id, :filter)
   end
 
   def _create_params

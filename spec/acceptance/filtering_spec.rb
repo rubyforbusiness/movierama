@@ -52,6 +52,7 @@ RSpec.describe 'filter movie list', type: :feature do
   before { page.open }
 
   it 'filters movies to show only those I liked' do
+    page.filter_by('I liked')
     expect(page.movie_titles).to eq(@liked_titles)
   end
 end

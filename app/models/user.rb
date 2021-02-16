@@ -14,4 +14,7 @@ class User < BaseModel
 
   # Submitted movies
   collection :movies, :Movie
+
+  set :liked_movies, :Movie
+  set :hated_movies, :Movie
 end

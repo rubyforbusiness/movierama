@@ -16,11 +16,21 @@
     .col-md-12
       .well.well-sm
         Sort by
-        = link_to('likers', by: 'likers')
+        = link_to('likers', by: 'likers', filter: @current_filter)
         |
-        = link_to('haters', by: 'haters')
+        = link_to('haters', by: 'haters', filter: @current_filter)
         |
-        = link_to('date', by: 'date')
+        = link_to('date', by: 'date', filter: @current_filter)
+
+  .row.mr-filter
+    .col-md-12
+      .well.well-sm
+        Filter by
+        = link_to('I liked', filter: 'i_liked', by: @current_sort)
+        |
+        = link_to('I hated', filter: 'i_hated', by: @current_sort)
+        |
+        = link_to('I\'m neutral', filter: 'i_neutral', by: @current_sort)
 
   .row
     .col-md-9

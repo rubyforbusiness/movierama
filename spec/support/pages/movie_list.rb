@@ -38,6 +38,12 @@ module Pages
       end
     end
 
+    def filter_by(attr)
+      within(page.find('.mr-filter')) do
+        click_on(attr)
+      end
+    end
+
     def movie_titles
       page.all('.mr-movie-title').map(&:text)
     end
