@@ -67,6 +67,25 @@ RSpec.describe 'filter movie list', type: :feature do
     page.filter_by('No filter')
     expect(page.movie_titles).to match_array(@all_titles)
   end
+
+  context 'filters and sorts' do
+    before do
+      another_user = User.create(
+        uid:  'null|112233',
+        name: 'Mr. Newby'
+      )
+      me_user = User.find(uid: RspecSupportWithUser::MOCK_UID).first
+      VotingBooth.new(me_user, @m_novote).vote(:like)
+      VotingBooth.new(another_user, @m_liked).vote(:like)
+      @liked_sorted_likers_titles = [@m_liked, @m_novote].map(&:title)
+    end
+
+    it 'shows movies I like sorted by likers' do
+      page.filter_by('I liked')
+      page.sort_by('likers')
+      expect(page.movie_titles).to eq(@liked_sorted_likers_titles)
+    end
+  end
 end
 
 
