@@ -19,7 +19,11 @@ RSpec.describe VotingBooth do
           movie.likers.include? user
         }.from(false).to(true)
       end
-      it 'increases the number of movies I like'
+
+      it 'increases the number of movies I like' do
+        expect {subject}.to change { user.liked_movies.count }.by 1
+      end
+
       it 'adds the movie to the list I like'
     end
   end

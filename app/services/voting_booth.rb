@@ -6,13 +6,14 @@ class VotingBooth
   end
 
   def vote(like_or_hate)
-    set = case like_or_hate
-      when :like then @movie.likers
-      when :hate then @movie.haters
+    movie_set, user_set = case like_or_hate
+      when :like then [@movie.likers, @user.liked_movies]
+      when :hate then [@movie.haters, @user.hated_movies]
       else raise
     end
     unvote # to guarantee consistency
-    set.add(@user)
+    movie_set.add(@user)
+    user_set.add(@movie)
     _update_counts
     self
   end
@@ -20,6 +21,8 @@ class VotingBooth
   def unvote
     @movie.likers.delete(@user)
     @movie.haters.delete(@user)
+    @user.liked_movies.delete(@movie)
+    @user.hated_movies.delete(@movie)
     _update_counts
     self
   end
