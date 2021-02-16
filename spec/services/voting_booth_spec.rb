@@ -3,9 +3,15 @@ require 'rails_helper'
 RSpec.describe VotingBooth do
   describe '#vote' do
     context 'me liking a movie' do
-      let(:movie) { }
+      subject do
+        described_class.new(user, movie).vote(:like)
+      end
+
+      let!(:user) { create(:user) }
+      let!(:movie) { create(:movie, user: user) }
+
       it 'increases the likers of a movie' do
-        expect(subject).to change(movie.likers.count).by 1
+        expect {subject}.to change { movie.likers.count }.by 1
       end
       it 'makes me a liker of a movie'
       it 'increases the number of movies I like'
