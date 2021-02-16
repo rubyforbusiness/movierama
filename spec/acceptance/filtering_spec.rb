@@ -48,18 +48,24 @@ RSpec.describe 'filter movie list', type: :feature do
 
     @liked_titles = [@m_liked].map(&:title)
     @hated_titles = [@m_hated].map(&:title)
+    @all_titles = [@m_liked, @m_hated, @m_novote].map(&:title)
   end
 
   before { page.open }
 
   it 'filters movies to show only those I liked' do
     page.filter_by('I liked')
-    expect(page.movie_titles).to eq(@liked_titles)
+    expect(page.movie_titles).to match_array(@liked_titles)
   end
 
   it 'filters movies to show only those I hated' do
     page.filter_by('I hated')
-    expect(page.movie_titles).to eq(@hated_titles)
+    expect(page.movie_titles).to match_array(@hated_titles)
+  end
+
+  it 'does not filter movies' do
+    page.filter_by('No filter')
+    expect(page.movie_titles).to match_array(@all_titles)
   end
 end
 

@@ -7,13 +7,13 @@ class MoviesController < ApplicationController
     elsif !current_user
       scope = Movie.all
     else
-      @current_filter = _index_params.fetch(:filter, 'i_neutral')
+      @current_filter = _index_params.fetch(:filter, 'no_filter')
       scope = case @current_filter
               when 'i_liked'
                 current_user.liked_movies
               when 'i_hated'
                 current_user.hated_movies
-              when 'i_neutral'
+              when 'no_filter'
                 Movie.all
               else
                 raise "invalid filter param: #{@current_filter}"
