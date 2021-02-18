@@ -29,6 +29,22 @@ class MoviesController < ApplicationController
     when 'date'
       scope.sort(by: 'Movie:*->created_at',  order: 'DESC')
     end
+
+    # notifications
+    if current_user
+      movies = Movie.find(user_id: current_user.id)
+      @notifications = []
+      movies.each do |movie|
+        movie.likers.each do |liker|
+          notification = OpenStruct.new(:user => liker , :movie => movie, :opinion => 'likes')
+          @notifications << notification
+        end
+        movie.haters.each do |hater|
+          notification = OpenStruct.new(:user => hater , :movie => movie, :opinion => 'hates')
+          @notifications << notification
+        end
+      end
+    end
   end
 
   def new

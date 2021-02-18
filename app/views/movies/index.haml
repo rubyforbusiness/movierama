@@ -82,3 +82,11 @@
         .btn-group.btn-group-justified
           %a.btn.btn-primary{ href: new_movie_path }
             Add movie
+  - if current_user
+    .row.mr-notification
+      .col-md-12
+        .well.well-sm
+          - @notifications.each do |notification|
+            .notification
+              = "#{notification.user.name} #{notification.opinion} #{notification.movie.title}"
+

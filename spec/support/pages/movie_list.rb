@@ -44,6 +44,12 @@ module Pages
       end
     end
 
+    def notification_finder(text)
+      within(page.find('.mr-notification')) do
+        has_content?(text)
+      end
+    end
+
     def movie_titles
       page.all('.mr-movie-title').map(&:text)
     end
@@ -61,6 +67,7 @@ module Pages
     def _movie_node(title)
       page.all('.mr-movie').find { |n| n.has_content?(title) }
     end
+
   end
 end
 
